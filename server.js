@@ -1,14 +1,14 @@
 // backend/src/server.js
 const express = require('express');
 const dotenv = require('dotenv');
-const connectDB = require('./src/config/db');
-const saludMentalRoutes = require('./src/routes/saludMentalRoutes');
+//const connectDB = require('./src/config/db');
+//const saludMentalRoutes = require('./src/routes/saludMentalRoutes');
 const bodyParser = require('body-parser');
 const cors = require('cors'); // Importar cors
 const app = express();
 
 dotenv.config(); // Cargar variables de entorno
-connectDB(); // Conectar a la base de datos
+//connectDB(); // Conectar a la base de datos
 
 
 // Aumentar el límite del tamaño del cuerpo
@@ -22,14 +22,14 @@ app.use(cors());
 app.use(express.json());
 
 // Montar las rutas de llamadas
-app.use('/api/saludMental', saludMentalRoutes);
+//app.use('/api/saludMental', saludMentalRoutes);
 
 // Ruta básica de prueba
 app.get('/', (req, res) => {
   res.send('API is running...');
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
