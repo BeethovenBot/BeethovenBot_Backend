@@ -2,7 +2,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./src/config/db');
-//const saludMentalRoutes = require('./src/routes/saludMentalRoutes');
+const BeethovenRoutes = require('./src/routes/BeethovenRoutes');
 const bodyParser = require('body-parser');
 const cors = require('cors'); // Importar cors
 const app = express();
@@ -21,7 +21,7 @@ app.use(cors());
 app.use(express.json());
 
 // Montar las rutas de llamadas
-//app.use('/api/saludMental', saludMentalRoutes);
+app.use('/api', BeethovenRoutes);
 
 // Ruta básica de prueba
 app.get('/', (req, res) => {
