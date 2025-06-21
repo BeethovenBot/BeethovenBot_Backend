@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 //const TranscripcionOnBoarding= require('../models/TranscripcionOnBoardingSaludMental');
-const { OpenAI } = require("openai");
+//const { OpenAI } = require("openai");
 
 
 exports.consultaMano = async (req, res) => {
