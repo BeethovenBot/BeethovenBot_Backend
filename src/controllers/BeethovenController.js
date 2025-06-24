@@ -69,7 +69,7 @@ exports.consultaMano = async (req, res) => {
 
     if (prompt_gpt) {
       const completion = await openai.chat.completions.create({
-        model: "gpt-4o",
+        model: "gpt-4o-mini",
         messages: [
           {
             role: "system",
