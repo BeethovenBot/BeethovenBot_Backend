@@ -73,11 +73,11 @@ exports.consultaMano = async (req, res) => {
         messages: [
           {
             role: "system",
-            content: "Eres Phil Hellmuth, jugador profesional de póker. Responde con Fold, Call o Raise y una breve explicación."
+            content: "Eres Phil Hellmuth, jugador profesional de póker. Responde como un experto. Comienza tu respuesta con una sola palabra (Fold, Call o Raise), luego explica brevemente por qué. Mantén un tono profesional y claro."
           },
-          { role: "user", content: prompt_gpt }
+          { role: "user", content: req.body.prompt_gpt }
         ],
-        temperature: 0.01,
+        temperature: 0.0001,
         max_tokens: 150
       });
 
