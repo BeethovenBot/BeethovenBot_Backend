@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
+
 const multer = require('multer');
-const multer = require('multer');
+const upload = multer({ storage: multer.memoryStorage() }); // ✅ guardar en memoria
 
 const { consultaMano } = require('../controllers/BeethovenController');
-const upload = multer({ storage: multer.memoryStorage() });
+const { procesarOCR } = require('../controllers/OcrController');
 
-// Rutas
 router.post('/consulta', consultaMano);
 router.post('/ocr', upload.array('imagenes'), procesarOCR);
 
