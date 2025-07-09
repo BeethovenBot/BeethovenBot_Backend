@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { consultaMano, procesarOCR } = require('../controllers/BeethovenController');
+const { consultaMano} = require('../controllers/BeethovenController');
 const { procesarOCR } = require('../controllers/OcrController');
 
 router.post('/consulta', consultaMano);
