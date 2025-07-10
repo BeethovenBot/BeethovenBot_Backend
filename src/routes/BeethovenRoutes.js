@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const multer = require('multer');
-const upload = multer({ storage: multer.memoryStorage() }); // ✅ guardar en memoria
+const upload = multer();
 
 const { consultaMano } = require('../controllers/BeethovenController');
 const { procesarOCR } = require('../controllers/OcrController');
