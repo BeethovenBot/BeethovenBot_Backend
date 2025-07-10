@@ -18,7 +18,7 @@ exports.procesarOCR = async (req, res) => {
       });
     });
 
-    const response = await axios.post('http://3.212.146.65:8000/ocr', form, {
+    const response = await axios.post('https://beethoven.mozartai.com.co/ocr', form, {
       headers: form.getHeaders(),
       maxBodyLength: Infinity
     });
