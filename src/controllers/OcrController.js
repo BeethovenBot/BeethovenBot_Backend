@@ -1,46 +1,34 @@
-const axios = require('axios');
-const FormData = require('form-data');
+const posiblesCampos = ['imagen', 'image', 'file'];
 
-exports.procesarOCR = async (req, res) => {
-  try {
-    const imagenes = req.files;
+for (let idx = 0; idx < imagenes.length; idx++) {
+  const file = imagenes[idx];
+  let exito = false;
 
-    if (!imagenes || imagenes.length === 0) {
-      return res.status(400).json({ error: 'No se enviaron imágenes' });
-    }
+  for (const campo of posiblesCampos) {
+    const form = new FormData();
+    form.append(campo, file.buffer, {
+      filename: file.originalname || `imagen${idx}.png`,
+      contentType: file.mimetype
+    });
 
-    const resultados = [];
+    console.log(`📤 Probando campo "${campo}" para imagen ${idx + 1}`);
 
-    for (let idx = 0; idx < imagenes.length; idx++) {
-      const file = imagenes[idx];
-      const form = new FormData();
-
-      // IMPORTANTE: aquí puedes probar cambiar 'imagen' a 'file' o 'image' si sigue fallando
-      form.append('file', file.buffer, {
-        filename: file.originalname || `imagen${idx}.png`,
-        contentType: file.mimetype
-      });
-
-      console.log(`📤 Enviando imagen ${idx + 1}: ${file.originalname}, tamaño: ${file.buffer.length} bytes`);
-
+    try {
       const response = await axios.post('https://beethoven.mozartai.com.co/ocr', form, {
         headers: form.getHeaders(),
         maxBodyLength: Infinity
       });
 
+      console.log(`✅ Campo "${campo}" aceptado para imagen ${idx + 1}`);
       resultados.push(response.data);
+      exito = true;
+      break; // salir del bucle de campos
+    } catch (err) {
+      console.error(`❌ Campo "${campo}" falló:`, err.response?.status, err.response?.data?.detail || err.message);
     }
-
-    return res.json({ results: resultados });
-  } catch (error) {
-    console.error('❌ Error al procesar OCR:', error.message);
-    if (error.response) {
-      console.error('🔍 Código de estado:', error.response.status);
-      console.error('🔍 Headers:', error.response.headers);
-      console.error('🔍 Respuesta del servidor OCR:', error.response.data);
-    } else {
-      console.error('❌ Error sin respuesta del servidor:', error);
-    }
-    return res.status(500).json({ error: 'Fallo al reenviar imágenes al OCR' });
   }
-};
+
+  if (!exito) {
+    resultados.push({ error: `Ningún campo funcionó para imagen ${idx + 1}` });
+  }
+}
