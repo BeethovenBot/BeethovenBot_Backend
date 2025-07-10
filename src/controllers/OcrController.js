@@ -16,7 +16,7 @@ exports.procesarOCR = async (req, res) => {
       const form = new FormData();
 
       // IMPORTANTE: aquí puedes probar cambiar 'imagen' a 'file' o 'image' si sigue fallando
-      form.append('imagen', file.buffer, {
+      form.append('file', file.buffer, {
         filename: file.originalname || `imagen${idx}.png`,
         contentType: file.mimetype
       });
