@@ -1,3 +1,5 @@
+const Historial = require('../models/historial');
+
 exports.guardarHistorial = async (req, res) => {
   try {
     const {
