@@ -1,5 +1,6 @@
 const Historial = require('../models/historial');
 
+// Guardar nueva entrada en el historial
 exports.guardarHistorial = async (req, res) => {
   try {
     const {
@@ -24,5 +25,16 @@ exports.guardarHistorial = async (req, res) => {
   } catch (err) {
     console.error('❌ Error al guardar historial:', err.message);
     res.status(500).json({ error: 'Error al guardar historial' });
+  }
+};
+
+// Obtener historial ordenado (más reciente primero)
+exports.obtenerHistorial = async (req, res) => {
+  try {
+    const historial = await Historial.find().sort({ createdAt: -1 });
+    res.status(200).json(historial);
+  } catch (err) {
+    console.error('❌ Error al obtener historial:', err.message);
+    res.status(500).json({ error: 'Error al obtener historial' });
   }
 };
