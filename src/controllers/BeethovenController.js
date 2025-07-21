@@ -1,3 +1,27 @@
+const axios = require('axios');
+const Historial = require('../models/historial');
+const tablasPreflop = require('../archivos/tablasPreflop');
+const { OpenAI } = require('openai');
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+// Función auxiliar para formato de mano
+function formatearMano(c1, c2) {
+  const valor1 = c1.slice(0, -1);
+  const valor2 = c2.slice(0, -1);
+  const palo1 = c1.slice(-1);
+  const palo2 = c2.slice(-1);
+  const valoresOrdenados = [valor1, valor2].sort((a, b) => valorNumerico(b) - valorNumerico(a));
+  const suited = palo1 === palo2 ? 's' : 'o';
+  return valor1 === valor2 ? `${valor1}${valor2}` : `${valoresOrdenados[0]}${valoresOrdenados[1]}${suited}`;
+}
+
+function valorNumerico(carta) {
+  const orden = { 'A': 14, 'K': 13, 'Q': 12, 'J': 11, 'T': 10 };
+  return orden[carta] || parseInt(carta);
+}
+
+// Controlador principal
 exports.consultaMano = async (req, res) => {
   const {
     timestamp,
@@ -45,6 +69,7 @@ exports.consultaMano = async (req, res) => {
       });
     }
 
+    // Si es preflop y existe en tabla
     if (fase === 'preflop') {
       const tabla = tablasPreflop[pos_relativa] || {};
       const decision = tabla[mano];
@@ -80,6 +105,7 @@ Los jugadores tienen los siguientes stacks y apuestas:\n${jugadores}.
 ¿Qué debería hacer?`;
     }
 
+    // Enviar a GPT
     if (promptFinal) {
       const completion = await openai.chat.completions.create({
         model: "gpt-4o-mini",
@@ -116,6 +142,6 @@ Los jugadores tienen los siguientes stacks y apuestas:\n${jugadores}.
 
   } catch (error) {
     console.error('❌ Error en el endpoint /consulta:', error);
-    return res.status(500).json({ error: 'Error interno del servidor' });
+    return res.status(500).json({ error: 'Error interno del servidor', detalle: error.message });
   }
 };
